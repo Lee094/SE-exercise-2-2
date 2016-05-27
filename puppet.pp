@@ -45,9 +45,9 @@ class puppet () {
 	}
 
 	# parameters for my_memory_check
-	$critical = "60"
-	$warning = "30"
-	$email = "hatredfour@yahoo.com"
+	$critical = "90"
+	$warning = "60"
+	$email = "mine@email.com"
 	cron { 'memory_check':
 		ensure => 'present',
 		command => "/bin/bash /home/monitor/src/my_memory_check -c $critical -w $warning -e $email",
