@@ -1,10 +1,10 @@
 class puppet () {
 
-#	package {
-#		[ 'vim-minimal', 'curl', 'git' ]:
-#		ensure => latest,
-#		before => User['monitor']
-#	}
+	package {
+		[ 'vim-minimal', 'curl', 'git' ]:
+		ensure => latest,
+		before => User['monitor']
+	}
 	
 	# creates user 'monitor'
 	user { 'monitor':
@@ -48,10 +48,12 @@ class puppet () {
 	$critical = "90"
 	$warning = "60"
 	$email = "mine@email.com"
+	
+	# runs my_memory_check every 10 minutes
 	cron { 'memory_check':
 		ensure => 'present',
 		command => "/bin/bash /home/monitor/src/my_memory_check -c $critical -w $warning -e $email",
-		minute => '*/1',
+		minute => '*/10',
 		require => File['my_memory_check']
 	}
 }
