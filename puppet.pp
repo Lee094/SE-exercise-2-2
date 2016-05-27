@@ -2,7 +2,7 @@ class puppet () {
 
 	package { [ 'vim-minimal', 'curl', 'git' ]:
 		ensure => latest,
-		before => User['monitor']
+		before => User['monitor'],
 	}
 	
 	# creates user 'monitor'
@@ -41,25 +41,25 @@ class puppet () {
 		ensure => 'link',
 		target => '/home/monitor/scripts/memory_check',
 		require => File['/home/monitor/src/'],
-		alias => 'my_memory_check'
+		alias => 'my_memory_check',
 	}
 
 	# parameters for my_memory_check
 	$critical = "90"
 	$warning = "60"
-	$email = "mine@email.com"
+	$email = "email@mine.com"
 	
 	# runs my_memory_check every 10 minutes
 	cron { 'memory_check':
 		ensure => 'present',
 		command => "/bin/bash /home/monitor/src/my_memory_check -c $critical -w $warning -e $email",
 		minute => '*/10',
-		require => File['my_memory_check']
+		require => File['my_memory_check'],
 	} 
 
-	# for setting timezone
+	# checks tzdata for setting timezone
 	package { 'tzdata':
-		ensure => 'latest',
+		ensure => 'present',
 	}
 
 	# sets timezone to PHT
@@ -87,4 +87,3 @@ class puppet () {
 }
 
 include puppet
-
