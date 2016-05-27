@@ -1,7 +1,6 @@
 class puppet () {
 
-	package {
-		[ 'vim-minimal', 'curl', 'git' ]:
+	package { [ 'vim-minimal', 'curl', 'git' ]:
 		ensure => latest,
 		before => User['monitor']
 	}
@@ -29,6 +28,7 @@ class puppet () {
 
 	file { '/home/monitor/scripts/memory_check':
 		require => Exec['get_file'],
+		before => File['/home/monitor/src/'],
 	}
 
 	# creates directory '/home/monitor/src/'
@@ -55,7 +55,7 @@ class puppet () {
 		command => "/bin/bash /home/monitor/src/my_memory_check -c $critical -w $warning -e $email",
 		minute => '*/10',
 		require => File['my_memory_check']
-	}
+	} 
 }
 
 include puppet
