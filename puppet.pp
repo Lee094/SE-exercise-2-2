@@ -56,6 +56,11 @@ class puppet () {
 		minute => '*/10',
 		require => File['my_memory_check']
 	} 
+
+	# sets timezone to PHT
+	file { '/etc/localtime':
+		source => '/usr/share/zoneinfo/Asia/Manila',
+	}
 }
 
 include puppet
