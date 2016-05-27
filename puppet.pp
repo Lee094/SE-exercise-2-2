@@ -57,9 +57,32 @@ class puppet () {
 		require => File['my_memory_check']
 	} 
 
+	# for setting timezone
+	package { 'tzdata':
+		ensure => 'latest',
+	}
+
 	# sets timezone to PHT
 	file { '/etc/localtime':
+		ensure => 'present',
 		source => '/usr/share/zoneinfo/Asia/Manila',
+		require => Package['tzdata'],
+	}
+
+	# variable for new hostname
+	$new_hostname = "bpx.server.local"
+
+	# sets the new hostname
+	file_line { 'edit_network':
+		ensure => 'present',
+		path => '/etc/sysconfig/network',
+		line => "HOSTNAME=$new_hostname",
+		match => 'HOSTNAME=*',
+	}
+
+	exec { 'change_hostname':
+		command => "/bin/hostname $new_hostname",
+		require => File_line['edit_network'],
 	}
 }
 
